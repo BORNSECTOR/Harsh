@@ -18,6 +18,19 @@ export default function ServicesPage() {
   ]);
   let nextId = data.length ? Math.max(...data.map(d => d.id)) + 1 : 1;
 
+const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Add credentials: "include" so the PHP session cookie is saved
+      const response = await fetch('/backend/api/auth.php', {
+        method: 'POST',
+        credentials: 'include', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
   return (
     <DataTable
       title="Services"

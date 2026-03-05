@@ -29,6 +29,36 @@ export default function LeadCapture() {
     }
   };
 
+  export function LeadCapture() {
+  // 1. Read the service name from the URL
+  const [searchParams] = useSearchParams();
+  const preselectedService = searchParams.get("service") || "";
+
+  // 2. Set the default service in the form data
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    city: "",
+    service: preselectedService,
+  });
+
+  // 3. Ensure it updates if the URL changes
+  useEffect(() => {
+    if (preselectedService) {
+      setFormData((prev) => ({ ...prev, service: preselectedService }));
+    }
+  }, [preselectedService]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // 4. Use .trim() to fix the "Name required" error when typing spaces
+    if (!formData.name.trim() || !formData.phone.trim()) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+  };
+
   return (
     <div ref={ref}>
       {/* Lead Form */}

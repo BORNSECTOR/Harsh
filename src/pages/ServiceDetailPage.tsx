@@ -6,6 +6,7 @@ import { serviceDetails } from "@/data/serviceDetails";
 import Header from "@/components/vinod/Header";
 import MapFooter from "@/components/vinod/MapFooter";
 import FloatingElements from "@/components/vinod/FloatingElements";
+import { Link } from "react-router-dom";
 
 export default function ServiceDetailPage() {
   const { id } = useParams();
@@ -118,12 +119,11 @@ export default function ServiceDetailPage() {
                       <span className="badge-discount">{card.discount}</span>
                     )}
                   </div>
-                  <Link
-                    to="/#lead-form"
-                    className="block w-full bg-primary text-primary-foreground py-2.5 rounded-xl font-semibold text-sm text-center hover:opacity-90 transition-opacity"
-                  >
-                    Book Now
-                  </Link>
+                  <Link to={`/contact?service=${encodeURIComponent(service.title)}`}>
+              <Button className="w-full bg-red-600 hover:bg-red-700 text-white">
+                Book Now
+              </Button>
+            </Link>
                 </div>
               </div>
             ))}

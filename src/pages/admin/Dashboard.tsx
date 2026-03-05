@@ -10,6 +10,7 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import { useEffect } from "react";
 
 const stats = [
   { label: "Total Leads", value: "1,284", change: "+12.5%", up: true, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
@@ -55,6 +56,25 @@ const statusStyles: Record<string, string> = {
   contacted: "bg-amber-50 text-amber-700",
   closed: "bg-emerald-50 text-emerald-700",
 };
+
+useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        // Add credentials: "include" here too, so PHP knows you are logged in!
+        const response = await fetch('/backend/api/dashboard.php', {
+          credentials: 'include', 
+        });
+        
+        if (response.status === 401) {
+          // Handle unauthorized access
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
 export default function Dashboard() {
   return (
