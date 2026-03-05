@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -7,52 +11,116 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const sampleLeads = [
-  { id: 1, name: "Rahul Sharma", mobile: "9876543210", service: "AC Service", status: "new", created_at: "2026-02-27" },
-  { id: 2, name: "Priya Gupta", mobile: "9123456789", service: "Denting & Painting", status: "contacted", created_at: "2026-02-26" },
-];
+type Lead = {
+  id: number;
+  name?: string;
+  email?: string;
+  phone?: string;
+  service?: string;
+  message?: string;
+  created_at?: string;
+};
+
+const formatDate = (value?: string) => {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat("en-IN", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  }).format(date);
+};
 
 export default function LeadsPage() {
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLeads = async () => {
+      try {
+        const response = await fetch("/backend/api/leads.php?action=get_all", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          setLeads([]);
+          return;
+        }
+
+        const payload = await response.json();
+        setLeads(Array.isArray(payload?.data) ? payload.data : []);
+      } catch {
+        setLeads([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLeads();
+  }, []);
+
   return (
-    <div>
-      <h2 className="font-heading font-bold text-xl text-foreground mb-6">Leads</h2>
-      <p className="text-muted-foreground text-sm mb-4">
-        Leads submitted through the website form will appear here once connected to your MySQL API.
-      </p>
-      <div className="bg-card rounded-xl border border-border overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>#</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Mobile</TableHead>
-              <TableHead>Service</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sampleLeads.map((lead, i) => (
-              <TableRow key={lead.id}>
-                <TableCell>{i + 1}</TableCell>
-                <TableCell className="font-medium">{lead.name}</TableCell>
-                <TableCell>{lead.mobile}</TableCell>
-                <TableCell>{lead.service}</TableCell>
-                <TableCell>
-                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                    lead.status === "new" ? "bg-blue-100 text-blue-700" :
-                    lead.status === "contacted" ? "bg-yellow-100 text-yellow-700" :
-                    "bg-green-100 text-green-700"
-                  }`}>
-                    {lead.status}
-                  </span>
-                </TableCell>
-                <TableCell className="text-muted-foreground">{lead.created_at}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+    <div className="space-y-4">
+      <div>
+        <h2 className="font-heading font-bold text-xl text-foreground">Leads</h2>
+        <p className="text-muted-foreground text-sm">All submitted lead inquiries.</p>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Lead List</CardTitle>
+        </CardHeader>
+        <CardContent className="overflow-x-auto">
+          {loading ? (
+            <div className="space-y-3">
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Customer Name</TableHead>
+                  <TableHead>Contact Info</TableHead>
+                  <TableHead>Requested Service</TableHead>
+                  <TableHead>Message</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {leads.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-muted-foreground">
+                      No leads found.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  leads.map((lead) => (
+                    <TableRow key={lead.id}>
+                      <TableCell className="whitespace-nowrap">{formatDate(lead.created_at)}</TableCell>
+                      <TableCell className="font-medium">{lead.name || "-"}</TableCell>
+                      <TableCell>
+                        <div className="text-sm">
+                          <div>{lead.email || "-"}</div>
+                          <div className="text-muted-foreground">{lead.phone || "-"}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">{lead.service || "Not specified"}</Badge>
+                      </TableCell>
+                      <TableCell className="max-w-[320px] truncate">{lead.message || "-"}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

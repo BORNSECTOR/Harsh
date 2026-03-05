@@ -3,6 +3,8 @@ import { useRevealAnimation } from "@/hooks/useRevealAnimation";
 import { ChevronDown, Flame, CheckCircle } from "lucide-react";
 import { submitLead } from "@/lib/api";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const faqData = [
   { q: "Do you provide free pickup & drop?", a: "Yes! We offer complimentary pickup and drop service within a 15km radius in Delhi NCR / Noida for all services above ₹999." },
