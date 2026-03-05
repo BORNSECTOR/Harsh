@@ -1,0 +1,9 @@
+# Disable directory browsing
+Options -Indexes
+
+# Protect against common injection attacks
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+    RewriteRule .* - [F]
+</IfModule>

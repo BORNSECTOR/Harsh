@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 200 18% 97%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 358 82% 49%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 200 12% 92%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 358 70% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 200 12% 90%;
+    --input: 200 12% 88%;
+    --ring: 358 82% 49%;
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Custom brand tokens */
+    --brand-gradient: linear-gradient(135deg, hsl(358, 82%, 49%), hsl(358, 90%, 40%));
+    --charcoal-gradient: linear-gradient(135deg, hsl(0, 0%, 12%), hsl(0, 0%, 8%));
+    --glass-bg: rgba(26, 26, 26, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --winter-blue: 210 80% 55%;
+    --success: 142 70% 45%;
+    --warning: 38 92% 50%;
+    --info: 210 80% 55%;
+  }
+
+  .dark {
+    --background: 0 0% 6%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 358 82% 49%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 358 70% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 358 82% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* Reveal animation */
+  .reveal-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  .reveal-up.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 3D Float animation */
+  .float-3d {
+    animation: float3d 4s ease-in-out infinite;
+  }
+  @keyframes float3d {
+    0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
+    25% { transform: translateY(-12px) rotateY(2deg) scale(1.02); }
+    50% { transform: translateY(-6px) rotateY(0deg) scale(1.01); }
+    75% { transform: translateY(-14px) rotateY(-2deg) scale(1.02); }
+  }
+
+  /* Marquee */
+  .marquee-track {
+    animation: marquee 20s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Loading car drive */
+  .drive-car {
+    animation: driveCar 1.2s ease-in-out infinite;
+  }
+  @keyframes driveCar {
+    0%, 100% { transform: translateX(-10px) rotate(-2deg); }
+    50% { transform: translateX(10px) rotate(2deg); }
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+  .glass-light {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  /* Glow blobs */
+  .blob-red {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, hsl(358, 82%, 49%, 0.15), transparent 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .blob-blue {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, hsl(210, 80%, 55%, 0.1), transparent 70%);
+    border-radius: 50%;
+    filter: blur(50px);
+    pointer-events: none;
+  }
+
+  /* Scrollbar hide for horizontal scroll */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Badge styles */
+  .badge-discount {
+    @apply bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full;
+  }
+  .badge-new {
+    @apply text-[10px] font-bold px-2 py-0.5 rounded-full;
+    background: hsl(var(--info));
+    color: white;
+  }
+  .badge-sale {
+    @apply text-[10px] font-bold px-2 py-0.5 rounded-full;
+    background: hsl(var(--warning));
+    color: white;
+  }
+
+  /* Mobile app-style card */
+  .app-card {
+    @apply bg-card rounded-xl p-4 shadow-sm border border-border;
+  }
+
+  /* Brand gradient bg */
+  .bg-brand-gradient {
+    background: var(--brand-gradient);
+  }
+  .bg-charcoal-gradient {
+    background: var(--charcoal-gradient);
+  }
+}
